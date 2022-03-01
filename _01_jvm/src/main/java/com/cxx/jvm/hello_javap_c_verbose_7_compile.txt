@@ -1,0 +1,238 @@
+Classfile /D:/product/java/java_course_worker/_01_jvm/src/main/java/com/cxx/jvm/Hello.class
+  Last modified 2022-3-1; size 1126 bytes
+  MD5 checksum 44f168849c2a68d1fa3d9bfcfef8c8ec
+  Compiled from "Hello.java"
+public class com.cxx.jvm.Hello
+  SourceFile: "Hello.java"
+  minor version: 0
+  major version: 51
+  flags: ACC_PUBLIC, ACC_SUPER
+Constant pool:
+   #1 = Methodref          #21.#31        //  java/lang/Object."<init>":()V
+   #2 = Fieldref           #32.#33        //  java/lang/System.out:Ljava/io/PrintStream;
+   #3 = String             #34            //  switch c
+   #4 = Methodref          #35.#36        //  java/io/PrintStream.println:(Ljava/lang/String;)V
+   #5 = String             #37            //  default
+   #6 = Float              100.0f
+   #7 = Class              #38            //  java/lang/StringBuilder
+   #8 = Methodref          #7.#31         //  java/lang/StringBuilder."<init>":()V
+   #9 = String             #39            //  float:
+  #10 = Methodref          #7.#40         //  java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  #11 = Methodref          #7.#41         //  java/lang/StringBuilder.append:(F)Ljava/lang/StringBuilder;
+  #12 = Methodref          #7.#42         //  java/lang/StringBuilder.toString:()Ljava/lang/String;
+  #13 = Float              10.0f
+  #14 = String             #43            //  d = a + b => 
+  #15 = Methodref          #7.#44         //  java/lang/StringBuilder.append:(D)Ljava/lang/StringBuilder;
+  #16 = Float              20.0f
+  #17 = String             #45            //  double d = a - b =>
+  #18 = Float              30.0f
+  #19 = String             #46            //  double d = (double)  a / b ==> 
+  #20 = Class              #47            //  com/cxx/jvm/Hello
+  #21 = Class              #48            //  java/lang/Object
+  #22 = Utf8               <init>
+  #23 = Utf8               ()V
+  #24 = Utf8               Code
+  #25 = Utf8               LineNumberTable
+  #26 = Utf8               main
+  #27 = Utf8               ([Ljava/lang/String;)V
+  #28 = Utf8               StackMapTable
+  #29 = Utf8               SourceFile
+  #30 = Utf8               Hello.java
+  #31 = NameAndType        #22:#23        //  "<init>":()V
+  #32 = Class              #49            //  java/lang/System
+  #33 = NameAndType        #50:#51        //  out:Ljava/io/PrintStream;
+  #34 = Utf8               switch c
+  #35 = Class              #52            //  java/io/PrintStream
+  #36 = NameAndType        #53:#54        //  println:(Ljava/lang/String;)V
+  #37 = Utf8               default
+  #38 = Utf8               java/lang/StringBuilder
+  #39 = Utf8               float:
+  #40 = NameAndType        #55:#56        //  append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  #41 = NameAndType        #55:#57        //  append:(F)Ljava/lang/StringBuilder;
+  #42 = NameAndType        #58:#59        //  toString:()Ljava/lang/String;
+  #43 = Utf8               d = a + b => 
+  #44 = NameAndType        #55:#60        //  append:(D)Ljava/lang/StringBuilder;
+  #45 = Utf8               double d = a - b =>
+  #46 = Utf8               double d = (double)  a / b ==> 
+  #47 = Utf8               com/cxx/jvm/Hello
+  #48 = Utf8               java/lang/Object
+  #49 = Utf8               java/lang/System
+  #50 = Utf8               out
+  #51 = Utf8               Ljava/io/PrintStream;
+  #52 = Utf8               java/io/PrintStream
+  #53 = Utf8               println
+  #54 = Utf8               (Ljava/lang/String;)V
+  #55 = Utf8               append
+  #56 = Utf8               (Ljava/lang/String;)Ljava/lang/StringBuilder;
+  #57 = Utf8               (F)Ljava/lang/StringBuilder;
+  #58 = Utf8               toString
+  #59 = Utf8               ()Ljava/lang/String;
+  #60 = Utf8               (D)Ljava/lang/StringBuilder;
+{
+  public com.cxx.jvm.Hello();
+    flags: ACC_PUBLIC
+    Code:
+      stack=1, locals=1, args_size=1
+         0: aload_0       
+         1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+         4: return        
+      LineNumberTable:
+        line 9: 0
+
+  public static void main(java.lang.String[]);
+    flags: ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=4, locals=8, args_size=1
+         0: bipush        10
+         2: istore_1      
+         3: bipush        20
+         5: istore_2      
+         6: iload_1       
+         7: iload_2       
+         8: imul          
+         9: istore_3      
+        10: iload_3       
+        11: lookupswitch  { // 1
+                     200: 28
+                 default: 36
+            }
+        28: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;
+        31: ldc           #3                  // String switch c
+        33: invokevirtual #4                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+        36: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;
+        39: ldc           #5                  // String default
+        41: invokevirtual #4                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+        44: bipush        10
+        46: istore        4
+        48: iload         4
+        50: iload_3       
+        51: if_icmpgt     234
+        54: iload         4
+        56: i2f           
+        57: fstore        5
+        59: fload         5
+        61: ldc           #6                  // float 100.0f
+        63: fsub          
+        64: fconst_0      
+        65: fcmpl         
+        66: ifle          95
+        69: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;
+        72: new           #7                  // class java/lang/StringBuilder
+        75: dup           
+        76: invokespecial #8                  // Method java/lang/StringBuilder."<init>":()V
+        79: ldc           #9                  // String float:
+        81: invokevirtual #10                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+        84: fload         5
+        86: invokevirtual #11                 // Method java/lang/StringBuilder.append:(F)Ljava/lang/StringBuilder;
+        89: invokevirtual #12                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+        92: invokevirtual #4                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+        95: fload         5
+        97: ldc           #13                 // float 10.0f
+        99: fsub          
+       100: fconst_0      
+       101: fcmpg         
+       102: ifgt          140
+       105: iload_1       
+       106: iload_2       
+       107: iadd          
+       108: i2d           
+       109: dstore        6
+       111: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;
+       114: new           #7                  // class java/lang/StringBuilder
+       117: dup           
+       118: invokespecial #8                  // Method java/lang/StringBuilder."<init>":()V
+       121: ldc           #14                 // String d = a + b => 
+       123: invokevirtual #10                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+       126: dload         6
+       128: invokevirtual #15                 // Method java/lang/StringBuilder.append:(D)Ljava/lang/StringBuilder;
+       131: invokevirtual #12                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+       134: invokevirtual #4                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+       137: goto          228
+       140: fload         5
+       142: ldc           #16                 // float 20.0f
+       144: fsub          
+       145: fconst_0      
+       146: fcmpg         
+       147: ifgt          185
+       150: iload_1       
+       151: iload_2       
+       152: isub          
+       153: i2d           
+       154: dstore        6
+       156: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;
+       159: new           #7                  // class java/lang/StringBuilder
+       162: dup           
+       163: invokespecial #8                  // Method java/lang/StringBuilder."<init>":()V
+       166: ldc           #17                 // String double d = a - b =>
+       168: invokevirtual #10                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+       171: dload         6
+       173: invokevirtual #15                 // Method java/lang/StringBuilder.append:(D)Ljava/lang/StringBuilder;
+       176: invokevirtual #12                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+       179: invokevirtual #4                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+       182: goto          228
+       185: fload         5
+       187: ldc           #18                 // float 30.0f
+       189: fsub          
+       190: fconst_0      
+       191: fcmpg         
+       192: ifgt          228
+       195: iload_1       
+       196: i2d           
+       197: iload_2       
+       198: i2d           
+       199: ddiv          
+       200: dstore        6
+       202: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;
+       205: new           #7                  // class java/lang/StringBuilder
+       208: dup           
+       209: invokespecial #8                  // Method java/lang/StringBuilder."<init>":()V
+       212: ldc           #19                 // String double d = (double)  a / b ==> 
+       214: invokevirtual #10                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+       217: dload         6
+       219: invokevirtual #15                 // Method java/lang/StringBuilder.append:(D)Ljava/lang/StringBuilder;
+       222: invokevirtual #12                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+       225: invokevirtual #4                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+       228: iinc          4, 10
+       231: goto          48
+       234: return        
+      LineNumberTable:
+        line 11: 0
+        line 12: 3
+        line 13: 6
+        line 15: 10
+        line 17: 28
+        line 19: 36
+        line 22: 44
+        line 23: 54
+        line 24: 59
+        line 25: 69
+        line 27: 95
+        line 28: 105
+        line 29: 111
+        line 30: 137
+        line 31: 150
+        line 32: 156
+        line 33: 182
+        line 34: 195
+        line 35: 202
+        line 22: 228
+        line 39: 234
+      StackMapTable: number_of_entries = 8
+           frame_type = 254 /* append */
+             offset_delta = 28
+        locals = [ int, int, int ]
+           frame_type = 7 /* same */
+           frame_type = 252 /* append */
+             offset_delta = 11
+        locals = [ int ]
+           frame_type = 252 /* append */
+             offset_delta = 46
+        locals = [ float ]
+           frame_type = 44 /* same */
+           frame_type = 44 /* same */
+           frame_type = 250 /* chop */
+          offset_delta = 42
+           frame_type = 250 /* chop */
+          offset_delta = 5
+
+}

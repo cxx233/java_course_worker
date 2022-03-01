@@ -1,6 +1,5 @@
 package com.cxx.jvm;
 
-import javax.annotation.Resource;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

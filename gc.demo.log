@@ -1,0 +1,16 @@
+Java HotSpot(TM) 64-Bit Server VM (25.201-b09) for windows-amd64 JRE (1.8.0_201-b09), built on Dec 15 2018 18:36:39 by "java_re" with MS VC++ 10.0 (VS2010)
+Memory: 4k page, physical 41801060k(24906436k free), swap 47830372k(27683024k free)
+CommandLine flags: -XX:InitialHeapSize=4294967296 -XX:MaxHeapSize=4294967296 -XX:+PrintGC -XX:+PrintGCDateStamps -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+UseCompressedClassPointers -XX:+UseCompressedOops -XX:-UseLargePagesIndividualAllocation -XX:+UseParallelGC 
+2022-03-05T10:48:37.109+0800: 0.710: [GC (Allocation Failure) [PSYoungGen: 1048576K->174579K(1223168K)] 1048576K->229596K(4019712K), 0.0302066 secs] [Times: user=0.03 sys=0.06, real=0.03 secs] 
+2022-03-05T10:48:37.254+0800: 0.855: [GC (Allocation Failure) [PSYoungGen: 1223155K->174584K(1223168K)] 1278172K->339269K(4019712K), 0.0381312 secs] [Times: user=0.09 sys=0.09, real=0.04 secs] 
+2022-03-05T10:48:37.411+0800: 1.012: [GC (Allocation Failure) [PSYoungGen: 1223160K->174587K(1223168K)] 1387845K->471724K(4019712K), 0.0348838 secs] [Times: user=0.11 sys=0.08, real=0.04 secs] 
+2022-03-05T10:48:37.559+0800: 1.160: [GC (Allocation Failure) [PSYoungGen: 1223163K->174589K(1223168K)] 1520300K->599951K(4019712K), 0.0337474 secs] [Times: user=0.14 sys=0.05, real=0.03 secs] 
+Heap
+ PSYoungGen      total 1223168K, used 216418K [0x000000076ab00000, 0x00000007c0000000, 0x00000007c0000000)
+  eden space 1048576K, 3% used [0x000000076ab00000,0x000000076d3d93e8,0x00000007aab00000)
+  from space 174592K, 99% used [0x00000007b5580000,0x00000007bffff788,0x00000007c0000000)
+  to   space 174592K, 0% used [0x00000007aab00000,0x00000007aab00000,0x00000007b5580000)
+ ParOldGen       total 2796544K, used 425361K [0x00000006c0000000, 0x000000076ab00000, 0x000000076ab00000)
+  object space 2796544K, 15% used [0x00000006c0000000,0x00000006d9f64678,0x000000076ab00000)
+ Metaspace       used 3122K, capacity 4556K, committed 4864K, reserved 1056768K
+  class space    used 332K, capacity 392K, committed 512K, reserved 1048576K

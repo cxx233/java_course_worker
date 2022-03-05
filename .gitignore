@@ -96,3 +96,6 @@ hs_err_pid*
 
 .idea
 *.iml
+
+!gc.demo.log
+!gc_serialgc.demo.log

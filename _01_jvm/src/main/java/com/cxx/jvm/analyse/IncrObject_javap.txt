@@ -1,0 +1,72 @@
+Classfile /D:/product/java/java_course_worker/_01_jvm/src/main/java/com/cxx/jvm/analyse/IncrObject.class
+  Last modified 2022-3-7; size 460 bytes
+  MD5 checksum 8274a09f8056310e928389112dc9b7df
+  Compiled from "IncrObject.java"
+public class com.cxx.jvm.analyse.IncrObject
+  minor version: 0
+  major version: 52
+  flags: ACC_PUBLIC, ACC_SUPER
+Constant pool:
+   #1 = Methodref          #5.#21         // java/lang/Object."<init>":()V
+   #2 = Fieldref           #4.#22         // com/cxx/jvm/analyse/IncrObject.counter:I
+   #3 = Fieldref           #4.#23         // com/cxx/jvm/analyse/IncrObject.count:I
+   #4 = Class              #24            // com/cxx/jvm/analyse/IncrObject
+   #5 = Class              #25            // java/lang/Object
+   #6 = Utf8               counter
+   #7 = Utf8               I
+   #8 = Utf8               count
+   #9 = Utf8               <init>
+  #10 = Utf8               ()V
+  #11 = Utf8               Code
+  #12 = Utf8               LineNumberTable
+  #13 = Utf8               LocalVariableTable
+  #14 = Utf8               this
+  #15 = Utf8               Lcom/cxx/jvm/analyse/IncrObject;
+  #16 = Utf8               getCount
+  #17 = Utf8               (I)I
+  #18 = Utf8               x
+  #19 = Utf8               SourceFile
+  #20 = Utf8               IncrObject.java
+  #21 = NameAndType        #9:#10         // "<init>":()V
+  #22 = NameAndType        #6:#7          // counter:I
+  #23 = NameAndType        #8:#7          // count:I
+  #24 = Utf8               com/cxx/jvm/analyse/IncrObject
+  #25 = Utf8               java/lang/Object
+{
+  public com.cxx.jvm.analyse.IncrObject();
+    descriptor: ()V
+    flags: ACC_PUBLIC
+    Code:
+      stack=1, locals=1, args_size=1
+         0: aload_0
+         1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+         4: return
+      LineNumberTable:
+        line 6: 0
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0       5     0  this   Lcom/cxx/jvm/analyse/IncrObject;
+
+  public int getCount(int);
+    descriptor: (I)I
+    flags: ACC_PUBLIC
+    Code:
+      stack=3, locals=2, args_size=2
+         0: aload_0
+         1: aload_0
+         2: getfield      #2                  // Field counter:I
+         5: iload_1
+         6: iadd
+         7: putfield      #3                  // Field count:I
+        10: aload_0
+        11: getfield      #3                  // Field count:I
+        14: ireturn
+      LineNumberTable:
+        line 12: 0
+        line 13: 10
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0      15     0  this   Lcom/cxx/jvm/analyse/IncrObject;
+            0      15     1     x   I
+}
+SourceFile: "IncrObject.java"

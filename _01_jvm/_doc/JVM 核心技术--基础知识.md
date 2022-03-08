@@ -341,7 +341,7 @@ TODO 待补充
 
 
 
-## 标准
+## 要求类型标准
 
 - **\- 开头为标准参数=》** 所有JVM 都要实现，并且向后兼容
 
@@ -369,21 +369,162 @@ TODO 待补充
 
 ### 2. 运行模式参数
 
+1. -server：设置 JVM 使用 server 模式，特点是启动速度比较慢，但运行时性能和内存理效率很高，适用于生产环境。在具有 64 位能力的 JDK 环境下将默认启用该模式，而忽略 -client 参数。
+2. -client ：JDK1.7 之前在32位的 x86 机器上的默认值是 -client 选项。设置 JVM 使用client 模式，特点是启动速度比较快，但运行时性能和内存管理效率不高，通常用于客户端应用程序或者 PC 应用开发和调试。此外，我们知道 JVM 加载字节码后，可以解释执行，也可以编译成本地代码再执行，所以可以配置 JVM 对字节码的处理模式。
+3. -Xint：在解释模式（interpreted mode）下运行，-Xint 标记会强制 JVM 解释执行所有的字节码，这当然会降低运行速度，通常低10倍或更多。
+  1. 在解释模式（interpreted mode）下运行 =》 再一定条件下编译成 本地执行的机械代码。 【<font color = "#ccd000">TODO</font> 什么意思】
+4. -Xcomp：-Xcomp 参数与-Xint 正好相反，JVM 在第一次使用时会把所有的字节码编译成本地代码，从而带来最大程度的优化。【注意预热】
+5. -Xmixed：-Xmixed 是混合模式，将解释模式和编译模式进行混合使用，有 JVM 自己决定，这是 JVM 的默认模式，也是推荐模式。 我们使用 java -version 可以看到 mixed mode 等信息。
+
+
+
+<font color = "#ccd000">TODO</font> ：待补充相关实操图片
+
+
+
+**解释模式：JVM 直接执行字节码组成的指令。**
+
+-Xint 和 -Xcomp 是对立关系
+
+
+
+
+
 
 
 ### 3. 堆内存设置参数
+
+<font color = "#fe1400">注意</font> ：涉及到内存的配置，需要根据实际情况大致估计。如下例子
+
+>压力不大情况下，OOM， 4G 机器 =》 留可以使用：3.8G 内存
+>
+>1. （非堆+堆外） + JVM 需要：300M ~ 500M
+>2. 给堆内的内存就3.2G ~ 3.3G =》-Xmx < 3.2G
+>
+>
+
+<font color = "#fe1400">经验</font>
+
+>①：尽量不要在线上做这种Java 应用程序的混合部署 
+>
+>​	（要求：同一个服务器，docker 运行，资源隔离，进程之间 不抢内存/资源）
+>
+>②：Xmx 最大值是操作系统内存的60% ~ 80%（不进行顶个配置）
+>
+>
+
+
+
+<font color = "#fe1400">问题</font>
+
+>1. 如果什么都不配置会如何？
+>
+>   1. 会默认值
+>
+>2. Xmx 是否与 Xms 设置相等？
+>
+>   1. 应该要设置相等，不相等的情况下，会堆内存扩容可能会导致性能抖动。
+>
+>      
+>
+>3. Xmx 设置为机器内存的什么比例合适？
+>
+>   1. 60~80%
+>
+>4. 作业：画一下 Xmx、Xms、Xmn、Meta、
+>  DirectMemory、Xss 这些内存参数的关系
+>
+>  1. ![image-20220308161731052](JVM 核心技术--基础知识.assets/image-20220308161731052.png)
+
+
+
+主要参数
+
+><font color = "blue">-Xmx</font>, 指定最大堆内存。 如 -Xmx4g。这只是限制了 Heap 部分的最大值为4g。这个**内存不包括栈内存，也不包括堆外使用的内存**。
+>
+><font color = "blue">-Xms</font>, 指定堆内存空间的初始大小。 如 -Xms4g。 而且指定的内存大小，并不是操作系统实际分配的初始值，而是GC先规划好，用到才分配。 专用服务器上需要保持 –Xms 和 –Xmx 一致，否则应用刚启动可能就有好几个 FullGC。<font color = "red">当两者配置不一致时，堆内存扩容可能会导致性能抖动。</font>
+>
+>​	- 性能抖动的体现：未达到Xmx 大小是，前提进行多几次FullGC，导致STW 等相关效应。（这个STW 具体跟GC 算法有关，这里知识距离）
+>
+><font color = "blue">-Xmn</font>, 等价于 -XX:NewSize，使用 G1 垃圾收集器 不应该 设置该选项，在其他的某些业务场景下可以设置。官方建议设置为 -Xmx 的 1/2 ~ ¼。
+>
+>​	=》 处理年轻代 大小 
+>
+><font color = "blue">-XX</font>：MaxPermSize=size, 这是 JDK1.7 之前使用的。Java8 默认允许的Meta空间无限大，此参数无效。
+>
+><font color = "blue">-XX：MaxMetaspaceSize=size</font>, Java8 默认不限制 Meta 空间，**一般不允许设置该选项。**
+>
+><font color = "blue">-XX：MaxDirectMemorySize=size</font>，系统可以使用的最大堆外内存，这个参数跟 -Dsun.nio.MaxDirectMemorySize 效果相同。
+>
+>-<font color = "blue">Xss</font>, 设置每个<a href = "线程栈">线程栈</a>的字节数，影响栈的深度。 例如 -Xss1m 指定线程栈为1MB，与-XX:ThreadStackSize=1m 等价。[看H3： JVM <font color = "blue">线程栈</font>内存结构 的关系]
+>
+>
 
 
 
 ### 4. GC 设置参数
 
+<font color = "#ccd000">TODO</font> ：问题：各个JVM 版本默认GC 是什么？
+
+>
+>
+>
+
+
+
+参数配置如下
+
+><font color = "blue">-XX：+UseG1GC</font>：使用 G1 垃圾回收器
+><font color = "blue">-XX：+UseConcMarkSweepGC</font>：使用 CMS 垃圾回收器
+><font color = "blue">-XX：+UseSerialGC</font>：使用**串行**垃圾回收器
+><font color = "blue">-XX：+UseParallelGC</font>：使用**并行**垃圾回收器
+>// Java 11+
+><font color = "blue">-XX：+UnlockExperimentalVMOptions -XX:+UseZGC </font>
+>// Java 12+
+><font color = "blue">-XX：+UnlockExperimentalVMOptions -XX:+UseShenandoahGC</font>
+
+
+
 
 
 ### 5. 分析诊断参数
+
+><font color = "blue">-XX：+-HeapDumpOnOutOfMemoryError</font> 选项，当 OutOfMemoryError 产生，即内存溢出（堆内存或持久代) 时，自动 Dump 堆内存。
+>	示例用法： java -XX:+HeapDumpOnOutOfMemoryError -Xmx256m ConsumeHeap
+>
+>
+>
+><font color = "blue">-XX：HeapDumpPath </font>选项，**与 HeapDumpOnOutOfMemoryError 搭配使用**，指定内存溢出时 Dump 文件的目录。
+>如果没有指定则默认为启动 Java 程序的工作目录。
+>	示例用法： java -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/usr/local/ ConsumeHeap  自动 Dump 的 hprof 文件会存储到 /usr/local/ 目录下。
+>
+>
+>
+><font color = "blue">-XX：OnError </font>选项，发生致命错误时（fatal error）执行的脚本。
+>例如, 写一个脚本来记录出错时间, 执行一些命令，或者 curl 一下某个在线报警的 url。
+>	示例用法：java -XX:OnError="gdb - %p" MyApp 可以发现有一个 %p 的格式化字符串，表示进程 PID。
+>
+>
+>
+><font color = "blue">-XX：OnOutOfMemoryError </font>选项，抛出 OutOfMemoryError 错误时执行的脚本。
+><font color = "blue">-XX：ErrorFile=filename </font>选项，致命错误的日志文件名,绝对路径或者相对路径。
+>-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1506，远程调试。 => 可配合idea 测试
+>
+>
 
 
 
 ### 6. JavaAgent 参数
 
+可以通过无侵入方式来做很多事情，比如注入 AOP 代码，执行统计等等，权限非常大。
 
+语法：
 
+>-agentlib:libname[=options] 启用 native 方式的 agent，参考 LD_LIBRARY_PATH 路径。
+>-agentpath:pathname[=options] 启用 native 方式的 agent。
+>-javaagent:jarpath[=options] 启用外部的 agent 库，比如 pinpoint.jar 等等。
+>-Xnoagent 则是禁用所有 agent。
+
+以下示例开启 CPU 使用时间抽样分析：
+
+>JAVA_OPTS="-agentlib:hprof=cpu=samples,file=cpu.samples.log"

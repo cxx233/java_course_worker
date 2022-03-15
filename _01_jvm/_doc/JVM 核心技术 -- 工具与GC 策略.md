@@ -597,9 +597,138 @@ CMS GC的设计**目标**是避免在老年代垃圾收集时出现长时间的�
 
 > 特点：此次 GC 事件中 最后一次STW 停顿
 
+通常CMS会尝试在年轻代尽可能空的情况下执行 Final Remark 阶段，以免连续触发多次 STW 事件。（因为 年轻代是并行的 标记-复制 算法，会触发STW）
 
 
 
+
+
+##### 阶段5 Concreent Sweep（并发清理）
+
+特点：
+
+> 不需要STW 停顿，删除老年在不在使用的对象，回收内存空间
+
+示意图：
+
+![image-20220314112247946](JVM 核心技术 -- 工具与GC 策略.assets/image-20220314112247946.png)
+
+
+
+#####  阶段6 Concurrent Reset （并发重置）
+
+作用：
+
+> 重置CMS算法相关的内部数据，为下一次GC循环做准备
+
+
+
+
+
+#### 缺点
+
+> 最大的问题就是老年代内存碎片问题（因为不压缩），在某些情况下GC会造成不可预测的暂停时间，特别是堆内存较大的情况下。
+
+
+
+
+
+
+
+###  G1 GC - STW
+
+设计方向：
+
+> G1的全称是 Garbage-First ，意为垃圾优先，哪一块的垃圾最多就优先清理它。
+
+
+
+主要设计目标：
+
+> 将STW停顿的时间和分布，变成可预期且可配置的。
+>
+> - G1 GC是一款软实时垃圾收集器，可以为其设置某项特定的性能指标。例如可以指定: 在任意 xx毫秒时间范围内，STW停顿不得超过 yy 毫秒。 举例说明: 任意 1秒 内暂停时间不超过 5毫秒 。G1 GC会尽力达成这个目标（有很大概率会满足，但并不完全确定）。
+
+
+
+#### 特点
+
+##### 划分region 区域（小堆块区域 smaller heap regions）
+
+![image-20220314114045904](JVM 核心技术 -- 工具与GC 策略.assets/image-20220314114045904.png)
+
+划分范围
+
+- Eden 区
+- 存活区 survivor 
+- Old 区
+
+逻辑说明： Eden 区+ 存活区 =》  年轻代
+
+
+
+#####  增量处理
+
+每次只处理一部分内存块 =》 GC 的回收集（collection set）
+
+每次GC暂停都会收集所有年轻代的内存块，但一般只包含部分老年代的内存块，见下图带对号的部分：
+
+![image-20220314114722346](JVM 核心技术 -- 工具与GC 策略.assets/image-20220314114722346.png)
+
+
+
+
+
+######  回收集原则
+
+G1的另一项创新是，在并发阶段估算每个小堆块存活对象的总数。构建回收集的原则是： 垃圾**最多**的小块会被优先收集。
+
+
+
+
+
+#### 配置参数
+
+> - -XX:+UseG1GC ：启用G1 GC，JDK7和JDK8要求必须显示申请启动G1 GC；
+> - <font color="red">-XX:G1NewSizePercent </font>：初始年轻代占整个Java Heap的大小，默认值为5%；
+> - <font color="red">-XX:G1MaxNewSizePercent </font>：最大年轻代占整个Java Heap的大小，默认值为60%；
+> - <font color="red">-XX:G1HeapRegionSize </font>：设置每个Region的大小，单位MB，需要为1，2，4，8，16，32中的某
+>   个值，默认是堆内存的1/2000。如果这个值设置比较大，那么大对象就可以进入Region了。
+> - <font color="red">-XX:ConcGCThreads </font>：与Java应用一起执行的GC线程数量，默认是Java线程的1/4，减少这个参
+>   数的数值可能会提升并行回收的效率，提高系统内部吞吐量。如果这个数值过低，参与回收垃圾的线程不足，也会导致并行回收机制耗时加长。
+> - <font color="red">-XX:+InitiatingHeapOccupancyPercent</font> （简称IHOP）：G1内部并行回收循环启动的阈值，默认为Java Heap的45%。这个可以理解为老年代使用大于等于45%的时候，JVM会启动垃圾回收。这个值非常重要，它决定了在什么时间启动老年代的并行回收。
+> - -XX:G1HeapWastePercent ：G1停止回收的最小内存大小，默认是堆大小的5%。GC会收集所有的Region中的对象，但是如果下降到了5%，就会停下来不再收集了。就是说，不必每次回收就把所有的垃圾都处理完，可以遗留少量的下次处理，这样也降低了单次消耗的时间。
+> - -XX:G1MixedGCCountTarget ：设置并行循环之后需要有多少个混合GC启动，默认值是8个。老年代Regions的回收时间通常比年轻代的收集时间要长一些。所以如果混合收集器比较多，可以允许G1延长老年代的收集时间。
+> - -XX:+G1PrintRegionLivenessInfo ：这个参数需要和 -
+>   XX:+UnlockDiagnosticVMOptions 配合启动，打印JVM的调试信息，每个Region里的对象存活信息。
+> - -XX:G1ReservePercent ：G1为了保留一些空间用于年代之间的提升，默认值是堆空间的10%。因为大量执行回收的地方在年轻代（存活时间较短），所以如果你的应用里面有比较大的堆内存空间、比较多的大对象存活，这里需要保留一些内存。
+> - -XX:+G1SummarizeRSetStats ：这也是一个VM的调试信息。如果启用，会在VM退出的时候打印出RSets的详细总结信息。如果启用 -XX:G1SummaryRSetStatsPeriod 参数，就会阶段性地打印RSets信息。
+> - -XX:+G1TraceConcRefinement ：这个也是一个VM的调试信息，如果启用，并行回收阶段的日志就会被详细打印出来。
+> - <font color="red">-XX:+GCTimeRatio</font> ：大家知道，GC的有些阶段是需要Stop-the-World，即停止应用线程的。这个参数就是计算花在Java应用线程上和花在GC线程上的时间比率，默认是9，跟新生代内存的分配比例一致。这个参数主要的目的是让用户可以控制花在应用上的时间，G1的计算公式是100/（1+GCTimeRatio）。这样如果参数设置为9，则最多10%的时间会花在GC工作上面。Parallel GC的默认值是99，表示1%的时间被用在GC上面，这是因为Parallel GC贯穿整个GC，而G1则根据Region来进行划分，不需要全局性扫描整个内存堆。
+> - -XX:+UseStringDeduplication ：手动开启Java String对象的去重工作，这个是JDK8u20版本之后新增的参数，主要用于相同String避免重复申请内存，节约Region的使用。
+> - <font color="red">-XX:MaxGCPauseMills</font> ：预期G1每次执行GC操作的暂停时间，单位是毫秒，默认值是200毫秒，G1会尽量保证控制在这个范围内。
+
+这里面最重要的参数
+
+> - -XX:+UseG1GC ：启用G1 GC；
+> - -XX:+InitiatingHeapOccupancyPercent ：决定什么情况下发生G1 GC；
+> - -XX:MaxGCPauseMills ：期望每次GC暂定的时间，比如我们设置为50，则G1 GC会通过调节每次GC的操作时间，尽量让每次系统的GC停顿都在50上下浮动。如果某次GC时间超过50ms，比如说100ms，那么系统会自动在后面动态调整GC行为，围绕50毫秒浮动。
+
+
+
+
+
+#### 处理步骤
+
+##### 步骤1：年轻代模式转移暂停（Evacuation Pause）
+
+
+
+##### 步骤2：并发标记（Concurrent Marking）
+
+
+
+##### 步骤3： 转移暂停: 混合模式（Evacuation Pause (mixed)）
 
 
 

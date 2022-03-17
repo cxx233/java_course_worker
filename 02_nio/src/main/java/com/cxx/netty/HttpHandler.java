@@ -56,8 +56,7 @@ public class HttpHandler  extends ChannelInboundHandlerAdapter{
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             // logger.error("处理测试接口出错"，e);
-            response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus
-                    .NO_CONTENT);
+            response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.NO_CONTENT);
         } finally {
             if (fullRequest != null) {
                 if (!HttpUtil.isKeepAlive(fullRequest)) {

@@ -4,6 +4,7 @@ import com.cxx.week03.gateway.filter.HeaderHttpRequestFilter;
 import com.cxx.week03.gateway.filter.HttpRequestFilter;
 import com.cxx.week03.gateway.filter.ProxyBizFilter;
 import com.cxx.week03.gateway.outbound.httpclient4.HttpOutboundHandler;
+import com.cxx.week03.gateway.outbound.httpclient4.MyHttpOutboundHandler;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -25,7 +26,8 @@ public class HttpInboundHandler extends ChannelInboundHandlerAdapter {
 
     private static Logger logger = LoggerFactory.getLogger(HttpInboundHandler.class);
     private final List<String> proxyServer;
-    private HttpOutboundHandler handler;
+//    private HttpOutboundHandler handler;
+    private MyHttpOutboundHandler handler;
     // 原来的过滤器
 //    private HttpRequestFilter filter = new HeaderHttpRequestFilter();
     // 修改成自己的过滤器
@@ -34,7 +36,8 @@ public class HttpInboundHandler extends ChannelInboundHandlerAdapter {
     public HttpInboundHandler(List<String> proxyServer) {
         this.proxyServer = proxyServer;
         // 所有过来都复用这个outboundHandler
-        this.handler = new HttpOutboundHandler(this.proxyServer);
+//        this.handler = new HttpOutboundHandler(this.proxyServer);
+        this.handler = new MyHttpOutboundHandler(this.proxyServer);
     }
 
     @Override
@@ -68,33 +71,5 @@ public class HttpInboundHandler extends ChannelInboundHandlerAdapter {
         }
     }
 
-//    private void handlerTest(FullHttpRequest fullRequest, ChannelHandlerContext ctx) {
-//        FullHttpResponse response = null;
-//        try {
-//            String value = "hello,kimmking";
-//            response = new DefaultFullHttpResponse(HTTP_1_1, OK, Unpooled.wrappedBuffer(value.getBytes("UTF-8")));
-//            response.headers().set("Content-Type", "application/json");
-//            response.headers().setInt("Content-Length", response.content().readableBytes());
-//
-//        } catch (Exception e) {
-//            logger.error("处理测试接口出错", e);
-//            response = new DefaultFullHttpResponse(HTTP_1_1, NO_CONTENT);
-//        } finally {
-//            if (fullRequest != null) {
-//                if (!HttpUtil.isKeepAlive(fullRequest)) {
-//                    ctx.write(response).addListener(ChannelFutureListener.CLOSE);
-//                } else {
-//                    response.headers().set(CONNECTION, KEEP_ALIVE);
-//                    ctx.write(response);
-//                }
-//            }
-//        }
-//    }
-//
-//    @Override
-//    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-//        cause.printStackTrace();
-//        ctx.close();
-//    }
 
 }

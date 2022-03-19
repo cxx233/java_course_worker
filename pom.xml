@@ -12,6 +12,7 @@
         <module>_01_jvm</module>
         <module>02_nio</module>
         <module>task</module>
+        <module>03concurrency</module>
     </modules>
 
     <dependencyManagement>

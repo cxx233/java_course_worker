@@ -13,6 +13,7 @@
         <module>02_nio</module>
         <module>task</module>
         <module>03concurrency</module>
+        <module>04_related_framework</module>
     </modules>
 
     <dependencyManagement>

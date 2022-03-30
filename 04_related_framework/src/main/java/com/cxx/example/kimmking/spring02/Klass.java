@@ -1,6 +1,6 @@
 package com.cxx.example.kimmking.spring02;
 
-import io.kimmking.spring01.Student;
+import com.cxx.example.kimmking.spring01.Student;
 import lombok.Data;
 
 import java.util.List;

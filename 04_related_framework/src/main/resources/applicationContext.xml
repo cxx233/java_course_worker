@@ -10,24 +10,24 @@
                         http://www.springframework.org/schema/aop
                         https://www.springframework.org/schema/aop/spring-aop.xsd">
 
-    <context:component-scan base-package="com.cxx.homework.bean" />
+    <context:component-scan base-package="com.cxx.homework.homework2.bean" />
 
-    <bean id="book1" class="com.cxx.homework.bean.assemble.Book" primary="true">
+    <bean id="book1" class="com.cxx.homework.homework2.bean.assemble.Book" primary="true">
         <property name="bookId" value="1"/>
         <property name="bookName" value="myFirstBook"/>
         <property name="version" value="version_1"/>
     </bean>
 
 
-    <bean id="book2" class="com.cxx.homework.bean.assemble.Book" >
+    <bean id="book2" class="com.cxx.homework.homework2.bean.assemble.Book" >
         <property name="bookId" value="2"/>
         <property name="bookName" value="mySecondBook"/>
         <property name="version" value="version_1"/>
     </bean>
 
-    <bean id = "mySchoolBag" class="com.cxx.homework.bean.assemble.SchoolBag" primary="true">
-<!--        <constructor-arg type="com.cxx.homework.bean.assemble.Book" ref="book1"/>-->
-        <constructor-arg type="com.cxx.homework.bean.assemble.Book" ref="book2"/>
+    <bean id = "mySchoolBag" class="com.cxx.homework.homework2.bean.assemble.SchoolBag" primary="true">
+<!--        <constructor-arg type="com.cxx.homework.homework2.bean.assemble.Book" ref="book1"/>-->
+        <constructor-arg type="com.cxx.homework.homework2.bean.assemble.Book" ref="book2"/>
 <!--        <constructor-arg>-->
 <!--            <list>-->
 <!--                <bean id="book1"/>-->

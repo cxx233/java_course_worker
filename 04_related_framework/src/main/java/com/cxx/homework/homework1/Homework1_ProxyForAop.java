@@ -34,7 +34,7 @@ public class Homework1_ProxyForAop {
             }
         };
 
-        InvocationHandler testHandler =
+//        InvocationHandler testHandler =
     }
 
 }

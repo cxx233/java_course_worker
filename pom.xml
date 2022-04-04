@@ -13,7 +13,7 @@
         <module>02_nio</module>
         <module>task</module>
         <module>03concurrency</module>
-        <module>04_related_framework</module>
+        <!--<module>04_related_framework</module>-->
     </modules>
 
 
@@ -113,6 +113,25 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-jms</artifactId>
                 <version>${spring-version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/org.springframework/spring-jdbc -->
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-jdbc</artifactId>
+                <version>${spring-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>5.1.25</version>
+            </dependency>
+
+            <!--https://github.com/brettwooldridge/HikariCP-->
+            <dependency>
+                <groupId>com.zaxxer</groupId>
+                <artifactId>HikariCP</artifactId>
+                <version>4.0.3</version>
             </dependency>
 
             <dependency>

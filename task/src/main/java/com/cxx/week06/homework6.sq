@@ -1,0 +1,85 @@
+CREATE TABLE homework8.t_customers (
+	customer_id varchar(100) NOT NULL,
+	customer_name varchar(100) NOT NULL COMMENT '用户名',
+	telephone varchar(36) NULL COMMENT '手机号码',
+	login_no varchar(100) NOT NULL COMMENT '登陆账号',
+	wechat_id varchar(100) NULL COMMENT '微信unionid',
+	CONSTRAINT t_customers_PK PRIMARY KEY (customer_id)
+)
+ENGINE=InnoDB
+DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_general_ci
+COMMENT='用户';
+
+
+CREATE TABLE homework8.t_customer_shipping_address (
+	id varchar(100) NOT NULL COMMENT 'id 主键',
+	customer_id varchar(100) NOT NULL,
+	address varchar(100) NOT NULL COMMENT '收货地址',
+	CONSTRAINT t_customer_shipping_address_PK PRIMARY KEY (id),
+	CONSTRAINT t_customer_shipping_address_FK FOREIGN KEY (customer_id) REFERENCES homework8.t_customers(customer_id)
+)
+ENGINE=InnoDB
+DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_general_ci
+COMMENT='用户收货地址';
+
+
+CREATE TABLE homework8.t_orders (
+	order_id varchar(100) NOT NULL COMMENT '订单主键',
+	customer_id varchar(100) NOT NULL COMMENT '所属用户',
+	custmer_shipping_address_id varchar(100) NULL COMMENT '所属用户地址',
+	create_time DATETIME NOT NULL COMMENT '创建日期',
+	update_time DATETIME NULL COMMENT '订单更新时间',
+	CONSTRAINT t_orders_PK PRIMARY KEY (order_id),
+	CONSTRAINT t_orders_customer FOREIGN KEY (customer_id) REFERENCES homework8.t_customers(customer_id),
+	CONSTRAINT t_orders_customer_shipping_address FOREIGN KEY (custmer_shipping_address_id) REFERENCES homework8.t_customer_shipping_address(id)
+)
+ENGINE=InnoDB
+DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_general_ci
+COMMENT='订单';
+
+
+
+CREATE TABLE homework8.t_commodity (
+	commodity_id varchar(100) NOT NULL COMMENT '商品主键id',
+	name varchar(100) NOT NULL COMMENT '商品名称',
+	price DECIMAL NOT NULL COMMENT '价格',
+	introduction varchar(1000) NULL COMMENT '简介',
+	create_time DATETIME NOT NULL COMMENT '创建时间',
+	update_time varchar(100) NULL COMMENT '更新时间',
+	CONSTRAINT t_commodity_PK PRIMARY KEY (commodity_id)
+)
+ENGINE=InnoDB
+DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_general_ci
+COMMENT='商品信息';
+
+CREATE TABLE homework8.t_commodity_details (
+	id varchar(100) NOT NULL COMMENT '主键id',
+	commodity_id varchar(100) NOT NULL COMMENT '所属商品',
+	detailed_introduction LONGTEXT NULL COMMENT '详细介绍',
+	CONSTRAINT t_commodity_details_PK PRIMARY KEY (id),
+	CONSTRAINT t_commodity_details_FK FOREIGN KEY (commodity_id) REFERENCES homework8.t_commodity(commodity_id)
+)
+ENGINE=InnoDB
+DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_general_ci
+COMMENT='商品详细信息';
+---------------
+
+CREATE TABLE homework8.t_order_commodity (
+	order_id varchar(100) NOT NULL,
+	commodity_id varchar(100) NOT NULL,
+	create_time DATETIME NOT NULL,
+	update_time DATETIME NULL,
+	CONSTRAINT t_order_commodity_PK PRIMARY KEY (order_id,commodity_id),
+	CONSTRAINT t_order_commodity_FK FOREIGN KEY (commodity_id) REFERENCES homework8.t_commodity(commodity_id),
+	CONSTRAINT t_order_commodity_FK_1 FOREIGN KEY (order_id) REFERENCES homework8.t_orders(order_id)
+)
+ENGINE=InnoDB
+DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_general_ci
+COMMENT='订单商品';
+

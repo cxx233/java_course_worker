@@ -1,0 +1,28 @@
+spring:
+  datasource:
+    admin:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://192.168.23.162:3307/homework8?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+      username: root
+      password: 123456
+
+    slave1:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+#      这里要改成slave的地址情况
+      jdbc-url: jdbc:mysql://192.168.23.164:3308/homework8?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+      username: root
+      password: 123456
+
+    slave2:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      #      这里要改成slave的地址情况
+      jdbc-url: jdbc:mysql://192.168.23.164:3309/homework8?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+      username: root
+      password: 123456
+mybatis:
+  type-aliases-package: com.cxx.db.entity
+  mapper-locations:
+    - classpath*:mapper/*Mapper.xml
+
+server:
+  port: 8080

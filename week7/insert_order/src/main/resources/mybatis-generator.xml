@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+
+    <context id="MySql" defaultModelType="flat">
+
+        <!--定义生成的java类的编码格式-->
+        <property name="javaFileEncoding" value="UTF-8"/>
+
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
+
+        <jdbcConnection
+                driverClass="com.mysql.jdbc.Driver"
+                connectionURL="jdbc:mysql://192.168.23.162:3306/homework8"
+                userId="root"
+                password="123456" />
+
+        <javaModelGenerator targetPackage="com.cxx.insert.entity" targetProject="src/main/java"></javaModelGenerator>
+
+        <sqlMapGenerator targetPackage="mapper"  targetProject="src/main/resources"></sqlMapGenerator>
+
+        <javaClientGenerator targetPackage="com.cxx.insert.mapper" targetProject="src/main/java" type="XMLMAPPER"></javaClientGenerator>
+
+<!--        <table tableName="user_info">-->
+<!--            <property name="modelOnly" value="false"/>-->
+<!--        </table>    -->
+        <table tableName="t_commodity" domainObjectName="Commodity" enableSelectByExample="true"
+               enableDeleteByExample="true" enableCountByExample="true"
+               enableUpdateByExample="true" selectByExampleQueryId="true">
+            <property name="ignoreQualifiersAtRuntime" value="false"/>
+            <property name="useActualColumnNames" value="false"/>
+        </table>
+        <table tableName="t_commodity_details" domainObjectName="CommodityDetail" enableSelectByExample="true"
+               enableDeleteByExample="true" enableCountByExample="true"
+               enableUpdateByExample="true" selectByExampleQueryId="true">
+            <property name="ignoreQualifiersAtRuntime" value="false"/>
+            <property name="useActualColumnNames" value="false"/>
+        </table>
+        <table tableName="t_customer_shipping_address" domainObjectName="CommodityShippingAddress" enableSelectByExample="true"
+               enableDeleteByExample="true" enableCountByExample="true"
+               enableUpdateByExample="true" selectByExampleQueryId="true">
+            <property name="ignoreQualifiersAtRuntime" value="false"/>
+            <property name="useActualColumnNames" value="false"/>
+        </table>
+        <table tableName="t_customers" domainObjectName="Customers" enableSelectByExample="true"
+               enableDeleteByExample="true" enableCountByExample="true"
+               enableUpdateByExample="true" selectByExampleQueryId="true">
+            <property name="ignoreQualifiersAtRuntime" value="false"/>
+            <property name="useActualColumnNames" value="false"/>
+        </table>
+
+        <table tableName="t_order_commodity" domainObjectName="OrderCommodity" enableSelectByExample="true"
+               enableDeleteByExample="true" enableCountByExample="true"
+               enableUpdateByExample="true" selectByExampleQueryId="true">
+            <property name="ignoreQualifiersAtRuntime" value="false"/>
+            <property name="useActualColumnNames" value="false"/>
+        </table>
+
+        <table tableName="t_orders" domainObjectName="Order" enableSelectByExample="true"
+               enableDeleteByExample="true" enableCountByExample="true"
+               enableUpdateByExample="true" selectByExampleQueryId="true">
+            <property name="ignoreQualifiersAtRuntime" value="false"/>
+            <property name="useActualColumnNames" value="false"/>
+        </table>
+
+
+    </context>
+
+</generatorConfiguration>

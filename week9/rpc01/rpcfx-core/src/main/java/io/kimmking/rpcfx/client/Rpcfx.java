@@ -3,16 +3,22 @@ package io.kimmking.rpcfx.client;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.parser.ParserConfig;
-import io.kimmking.rpcfx.api.*;
+import io.kimmking.rpcfx.api.Filter;
+import io.kimmking.rpcfx.api.LoadBalancer;
+import io.kimmking.rpcfx.api.Router;
+import io.kimmking.rpcfx.api.RpcfxRequest;
+import io.kimmking.rpcfx.api.RpcfxResponse;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import org.springframework.cglib.proxy.Enhancer;
+import org.springframework.cglib.proxy.MethodInterceptor;
+import org.springframework.cglib.proxy.MethodProxy;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,8 +48,76 @@ public final class Rpcfx {
     public static <T> T create(final Class<T> serviceClass, final String url, Filter... filters) {
 
         // 0. 替换动态代理 -> 字节码生成
-        return (T) Proxy.newProxyInstance(Rpcfx.class.getClassLoader(), new Class[]{serviceClass}, new RpcfxInvocationHandler(serviceClass, url, filters));
+        // 实现方式：https://www.jianshu.com/p/e983ecf3e7a5
+        // 增强内容：https://tech.meituan.com/2019/09/05/java-bytecode-enhancement.html
+//        return (T) Proxy.newProxyInstance(Rpcfx.class.getClassLoader(), new Class[]{serviceClass}, new RpcfxInvocationHandler(serviceClass, url, filters));
 
+        // TODO 这里替换
+        Enhancer enhancer = new Enhancer();
+        enhancer.setSuperclass(serviceClass);
+        enhancer.setCallback(new RpcIntercept(serviceClass, url, filters));
+        return (T) enhancer.create();
+    }
+
+
+    public static class RpcIntercept implements MethodInterceptor {
+
+        public static final MediaType JSONTYPE = MediaType.get("application/json; charset=utf-8");
+
+        private final Class<?> serviceClass;
+        private final String url;
+        private final Filter[] filters;
+
+        public <T> RpcIntercept(Class<T> serviceClass, String url, Filter[] filters) {
+            this.serviceClass = serviceClass;
+            this.url = url;
+            this.filters = filters;
+        }
+
+        @Override
+        public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
+            // 加filter地方之二
+            // mock == true, new Student("hubao");
+
+            RpcfxRequest request = new RpcfxRequest();
+            request.setServiceClass(this.serviceClass.getName());
+            request.setMethod(method.getName());
+            request.setParams(objects);
+
+            if (null!=filters) {
+                for (Filter filter : filters) {
+                    if (!filter.filter(request)) {
+                        return null;
+                    }
+                }
+            }
+
+            RpcfxResponse response = post(request, url);
+
+            // 加filter地方之三
+            // Student.setTeacher("cuijing");
+
+            // 这里判断response.status，处理异常
+            // 考虑封装一个全局的RpcfxException
+
+            return JSON.parse(response.getResult().toString());
+        }
+
+        private RpcfxResponse post(RpcfxRequest req, String url) throws IOException {
+            String reqJson = JSON.toJSONString(req);
+            System.out.println("req json: "+reqJson);
+
+            // 1.可以复用client
+            // 2.尝试使用httpclient或者netty client
+            OkHttpClient client = new OkHttpClient();
+            final Request request = new Request.Builder()
+                    .url(url)
+                    .post(RequestBody.create(JSONTYPE, reqJson))
+                    .build();
+            String respJson = client.newCall(request).execute().body().string();
+            System.out.println("resp json: "+respJson);
+            return JSON.parseObject(respJson, RpcfxResponse.class);
+        }
     }
 
     public static class RpcfxInvocationHandler implements InvocationHandler {

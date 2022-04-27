@@ -1,6 +1,5 @@
 package io.kimmking.rpcfx.demo.provider;
 
-import com.alibaba.fastjson.JSON;
 import io.kimmking.rpcfx.api.RpcfxRequest;
 import io.kimmking.rpcfx.api.RpcfxResolver;
 import io.kimmking.rpcfx.api.RpcfxResponse;
@@ -8,10 +7,7 @@ import io.kimmking.rpcfx.api.ServiceProviderDesc;
 import io.kimmking.rpcfx.demo.api.OrderService;
 import io.kimmking.rpcfx.demo.api.UserService;
 import io.kimmking.rpcfx.server.RpcfxInvoker;
-import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
-import org.apache.curator.framework.CuratorFrameworkFactory;
-import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.zookeeper.CreateMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -22,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.InetAddress;
-import java.net.InterfaceAddress;
-import java.net.UnknownHostException;
 
 @SpringBootApplication
 @RestController
@@ -73,7 +67,7 @@ public class RpcfxServerApplication {
 	RpcfxInvoker invoker;
 
 	@PostMapping("/")
-	public RpcfxResponse invoke(@RequestBody RpcfxRequest request) {
+	public RpcfxResponse invoke(@RequestBody RpcfxRequest request) throws ClassNotFoundException {
 		return invoker.invoke(request);
 	}
 

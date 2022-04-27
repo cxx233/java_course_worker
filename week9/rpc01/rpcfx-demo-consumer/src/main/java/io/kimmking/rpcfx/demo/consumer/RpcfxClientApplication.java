@@ -10,6 +10,7 @@ import io.kimmking.rpcfx.demo.api.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.net.URISyntaxException;
 import java.util.List;
 
 @SpringBootApplication
@@ -21,7 +22,7 @@ public class RpcfxClientApplication {
 	// nexus, userserivce -> userdao -> user
 	//
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws URISyntaxException {
 
 		// UserService service = new xxx();
 		// service.findById
